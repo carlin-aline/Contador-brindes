@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Contador de Brindes</title>
+<style>
+  body {
+    background: #2c3e50; /* azul escuro acinzentado */
+    color: #ecf0f1;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+  }
+  h1 {
+    margin-bottom: 30px;
+  }
+  .contador {
+    background: #34495e;
+    border-radius: 8px;
+    padding: 15px 25px;
+    margin-bottom: 20px;
+    width: 100%;
+    max-width: 360px;
+    box-sizing: border-box;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .nome {
+    font-size: 1.2em;
+    flex: 1;
+  }
+  .controles {
+    display: flex;
+    align-items: center;
+  }
+  .controles button {
+    background: #2980b9;
+    border: none;
+    color: #ecf0f1;
+    font-size: 1.5em;
+    padding: 5px 15px;
+    margin: 0 5px;
+    border-radius: 5px;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.3s;
+  }
+  .controles button:hover {
+    background: #3498db;
+  }
+  .numero {
+    min-width: 30px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: bold;
+  }
+  #salvarBtn {
+    background: #1abc9c;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border-radius: 6px;
+    margin-top: 30px;
+    cursor: pointer;
+    border: none;
+    color: #2c3e50;
+    font-weight: 700;
+    transition: background 0.3s;
+  }
+  #salvarBtn:hover {
+    background: #16a085;
+  }
+  /* Responsivo */
+  @media (max-width: 400px) {
+    body {
+      padding: 10px;
+    }
+    .contador {
+      padding: 12px 15px;
+      font-size: 0.9em;
+    }
+    .controles button {
+      font-size: 1.2em;
+      padding: 5px 10px;
+    }
+    #salvarBtn {
+      width: 100%;
+      padding: 12px 0;
+    }
+  }
+</style>
+</head>
+<body>
+
+<h1>Prêmios no Dia</h1>
+
+<div id="contadorArea">
+  <div class="contador">
+    <div class="nome">Brinde Normal:</div>
+    <div class="controles">
+      <button onclick="alterar('normal', -1)">−</button>
+      <div id="normal" class="numero">0</div>
+      <button onclick="alterar('normal', +1)">+</button>
+    </div>
+  </div>
+
+  <div class="contador">
+    <div class="nome">Brinde Especial:</div>
+    <div class="controles">
+      <button onclick="alterar('especial', -1)">−</button>
+      <div id="especial" class="numero">0</div>
+      <button onclick="alterar('especial', +1)">+</button>
+    </div>
+  </div>
+</div>
+
+<button id="salvarBtn">Salvar</button>
+
+<!-- Biblioteca html2canvas -->
+<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+
+<script>
+  function alterar(tipo, delta) {
+    const el = document.getElementById(tipo);
+    let val = parseInt(el.textContent);
+    val += delta;
+    if (val < 0) val = 0;
+    el.textContent = val;
+  }
+
+  document.getElementById('salvarBtn').addEventListener('click', () => {
+    const area = document.getElementById('contadorArea');
+    html2canvas(area).then(canvas => {
+      // Gera imagem e força download
+      canvas.toBlob(blob => {
+        const link = document.createElement('a');
+        link.download = 'contagem-brindes.png';
+        link.href = URL.createObjectURL(blob);
+        link.click();
+        URL.revokeObjectURL(link.href);
+      });
+    });
+  });
+</script>
+
+</body>
+</html>
