@@ -65,18 +65,25 @@
   .controles button:hover {
     background: #3498db;
   }
+  .numero {
+    min-width: 30px;
+    text-align: center;
+    font-size: 1.4em;
+    font-weight: bold;
+  }
   #resetBtn {
-    background: #e74c3c;
-    padding: 12px 30px;
-    font-size: 1.2em;
-    border-radius: 6px;
+    background: #e74c3c; /* vermelho forte */
+    padding: 6px 16px;
+    font-size: 1em;
+    border-radius: 5px;
     margin-top: 15px;
     cursor: pointer;
     border: none;
     color: #ecf0f1;
     font-weight: 700;
     transition: background 0.3s;
-    user-select: none;
+    width: auto;
+    align-self: flex-end;
   }
   #resetBtn:hover {
     background: #c0392b;
@@ -99,8 +106,9 @@
       padding: 5px 10px;
     }
     #resetBtn {
-      width: 100%;
-      padding: 12px 0;
+      padding: 6px 12px;
+      font-size: 0.9em;
+      margin-top: 10px;
     }
   }
 </style>
@@ -130,7 +138,7 @@
   </div>
 </div>
 
-<button id="resetBtn" onclick="resetarContagem()">Resetar Contagem</button>
+<button id="resetBtn">Resetar</button>
 
 <script>
   function alterar(tipo, delta) {
@@ -139,35 +147,48 @@
     val += delta;
     if (val < 0) val = 0;
     el.textContent = val;
+    salvarContagem();
+  }
+
+  function salvarContagem() {
+    const normal = document.getElementById('normal').textContent;
+    const especial = document.getElementById('especial').textContent;
+    localStorage.setItem('contadorNormal', normal);
+    localStorage.setItem('contadorEspecial', especial);
+  }
+
+  function carregarContagem() {
+    const normal = localStorage.getItem('contadorNormal');
+    const especial = localStorage.getItem('contadorEspecial');
+    if (normal !== null) document.getElementById('normal').textContent = normal;
+    if (especial !== null) document.getElementById('especial').textContent = especial;
   }
 
   function resetarContagem() {
+    const normalVal = parseInt(document.getElementById('normal').textContent);
+    const especialVal = parseInt(document.getElementById('especial').textContent);
+    if (normalVal === 0 && especialVal === 0) return;
     document.getElementById('normal').textContent = '0';
     document.getElementById('especial').textContent = '0';
+    salvarContagem();
   }
 
   function mostrarDataBrasilia() {
     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     let agora = new Date();
-
     let utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
     let horarioBr = new Date(utc - (3 * 3600000));
-
     let dia = String(horarioBr.getDate()).padStart(2, '0');
     let mes = meses[horarioBr.getMonth()];
     let ano = horarioBr.getFullYear();
-
     document.getElementById('dataAtual').textContent = `${dia}/${mes}/${ano}`;
   }
 
+  document.getElementById('resetBtn').addEventListener('click', resetarContagem);
+
   mostrarDataBrasilia();
+  carregarContagem();
 </script>
 
 </body>
 </html>
-
-
-</body>
-</html>
-
-
