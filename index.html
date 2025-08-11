@@ -6,7 +6,7 @@
 <title>Contador de Brindes</title>
 <style>
   body {
-    background: #2c3e50;
+    background: #2c3e50; /* azul escuro acinzentado */
     color: #ecf0f1;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
@@ -16,21 +16,19 @@
     min-height: 100vh;
   }
   h1 {
-    margin-bottom: 20px;
+    margin-bottom: 5px;
   }
-  .campo-data {
-    background: #34495e;
-    border-radius: 8px;
-    padding: 10px 20px;
+  #dataAtual {
+    font-size: 1.1em;
     margin-bottom: 25px;
+    background: #34495e;
+    padding: 10px 25px;
+    border-radius: 8px;
     width: 100%;
     max-width: 360px;
-    box-sizing: border-box;
-    font-size: 1.1em;
-    color: #ecf0f1;
-    border: none;
-    outline: none;
     text-align: center;
+    box-sizing: border-box;
+    user-select: none;
   }
   .contador {
     background: #34495e;
@@ -73,16 +71,12 @@
     font-size: 1.4em;
     font-weight: bold;
   }
-  #dataFormatada {
-    margin-bottom: 15px;
-    font-size: 1.1em;
-    font-weight: 600;
-  }
+  /* Responsivo */
   @media (max-width: 400px) {
     body {
       padding: 10px;
     }
-    .campo-data {
+    #dataAtual {
       font-size: 1em;
       padding: 8px 12px;
     }
@@ -100,10 +94,7 @@
 <body>
 
 <h1>Prêmios no Dia</h1>
-
-<input type="date" id="campoData" class="campo-data" />
-
-<div id="dataFormatada"></div>
+<div id="dataAtual">Carregando data...</div>
 
 <div id="contadorArea">
   <div class="contador">
@@ -126,22 +117,6 @@
 </div>
 
 <script>
-  const meses = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
-
-  document.getElementById('campoData').addEventListener('change', (e) => {
-    const val = e.target.value; // formato yyyy-mm-dd
-    if (!val) {
-      document.getElementById('dataFormatada').textContent = '';
-      return;
-    }
-    const parts = val.split('-');
-    const ano = parts[0];
-    const mes = parseInt(parts[1], 10) - 1;
-    const dia = parts[2];
-    const dataStr = `${dia}/[${meses[mes]}]/${ano}`;
-    document.getElementById('dataFormatada').textContent = dataStr;
-  });
-
   function alterar(tipo, delta) {
     const el = document.getElementById(tipo);
     let val = parseInt(el.textContent);
@@ -149,7 +124,31 @@
     if (val < 0) val = 0;
     el.textContent = val;
   }
+
+  function mostrarDataBrasilia() {
+    // Puxar data no horário de Brasília (GMT-3 fixo)
+    const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
+    let agora = new Date();
+
+    // Ajustar para GMT-3 (Brasília)
+    // Primeiro pega UTC (horário universal)
+    let utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
+    // Subtrai 3 horas em ms
+    let horarioBr = new Date(utc - (3 * 3600000));
+
+    let dia = String(horarioBr.getDate()).padStart(2, '0');
+    let mes = meses[horarioBr.getMonth()];
+    let ano = horarioBr.getFullYear();
+
+    document.getElementById('dataAtual').textContent = `${dia}/${mes}/${ano}`;
+  }
+
+  mostrarDataBrasilia();
+  // Se quiser atualizar todo dia sem precisar recarregar, roda assim:
+  // setInterval(mostrarDataBrasilia, 60 * 60 * 1000); // a cada hora
 </script>
 
 </body>
 </html>
+
+
