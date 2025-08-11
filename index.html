@@ -16,7 +16,21 @@
     min-height: 100vh;
   }
   h1 {
-    margin-bottom: 30px;
+    margin-bottom: 20px;
+  }
+  .campo-data {
+    background: #34495e;
+    border-radius: 8px;
+    padding: 10px 20px;
+    margin-bottom: 25px;
+    width: 100%;
+    max-width: 360px;
+    box-sizing: border-box;
+    font-size: 1.1em;
+    color: #ecf0f1;
+    border: none;
+    outline: none;
+    text-align: center;
   }
   .contador {
     background: #34495e;
@@ -59,25 +73,14 @@
     font-size: 1.4em;
     font-weight: bold;
   }
-  #salvarBtn {
-    background: #1abc9c;
-    padding: 12px 30px;
-    font-size: 1.2em;
-    border-radius: 6px;
-    margin-top: 30px;
-    cursor: pointer;
-    border: none;
-    color: #2c3e50;
-    font-weight: 700;
-    transition: background 0.3s;
-  }
-  #salvarBtn:hover {
-    background: #16a085;
-  }
   /* Responsivo */
   @media (max-width: 400px) {
     body {
       padding: 10px;
+    }
+    .campo-data {
+      font-size: 1em;
+      padding: 8px 12px;
     }
     .contador {
       padding: 12px 15px;
@@ -87,16 +90,14 @@
       font-size: 1.2em;
       padding: 5px 10px;
     }
-    #salvarBtn {
-      width: 100%;
-      padding: 12px 0;
-    }
   }
 </style>
 </head>
 <body>
 
 <h1>Prêmios no Dia</h1>
+
+<input type="text" id="campoData" class="campo-data" placeholder="dd/[mês]/aaaa" maxlength="12" />
 
 <div id="contadorArea">
   <div class="contador">
@@ -118,11 +119,6 @@
   </div>
 </div>
 
-<button id="salvarBtn">Salvar</button>
-
-<!-- Biblioteca html2canvas -->
-<script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
-
 <script>
   function alterar(tipo, delta) {
     const el = document.getElementById(tipo);
@@ -132,20 +128,10 @@
     el.textContent = val;
   }
 
-  document.getElementById('salvarBtn').addEventListener('click', () => {
-    const area = document.getElementById('contadorArea');
-    html2canvas(area).then(canvas => {
-      // Gera imagem e força download
-      canvas.toBlob(blob => {
-        const link = document.createElement('a');
-        link.download = 'contagem-brindes.png';
-        link.href = URL.createObjectURL(blob);
-        link.click();
-        URL.revokeObjectURL(link.href);
-      });
-    });
-  });
+  // Opcional: Pode adicionar validação simples na data, mas deixei só o placeholder mesmo.
 </script>
 
 </body>
 </html>
+
+
