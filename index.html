@@ -65,11 +65,21 @@
   .controles button:hover {
     background: #3498db;
   }
-  .numero {
-    min-width: 30px;
-    text-align: center;
-    font-size: 1.4em;
-    font-weight: bold;
+  #resetBtn {
+    background: #e74c3c;
+    padding: 12px 30px;
+    font-size: 1.2em;
+    border-radius: 6px;
+    margin-top: 15px;
+    cursor: pointer;
+    border: none;
+    color: #ecf0f1;
+    font-weight: 700;
+    transition: background 0.3s;
+    user-select: none;
+  }
+  #resetBtn:hover {
+    background: #c0392b;
   }
   /* Responsivo */
   @media (max-width: 400px) {
@@ -87,6 +97,10 @@
     .controles button {
       font-size: 1.2em;
       padding: 5px 10px;
+    }
+    #resetBtn {
+      width: 100%;
+      padding: 12px 0;
     }
   }
 </style>
@@ -116,6 +130,8 @@
   </div>
 </div>
 
+<button id="resetBtn" onclick="resetarContagem()">Resetar Contagem</button>
+
 <script>
   function alterar(tipo, delta) {
     const el = document.getElementById(tipo);
@@ -125,15 +141,16 @@
     el.textContent = val;
   }
 
+  function resetarContagem() {
+    document.getElementById('normal').textContent = '0';
+    document.getElementById('especial').textContent = '0';
+  }
+
   function mostrarDataBrasilia() {
-    // Puxar data no horário de Brasília (GMT-3 fixo)
     const meses = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
     let agora = new Date();
 
-    // Ajustar para GMT-3 (Brasília)
-    // Primeiro pega UTC (horário universal)
     let utc = agora.getTime() + (agora.getTimezoneOffset() * 60000);
-    // Subtrai 3 horas em ms
     let horarioBr = new Date(utc - (3 * 3600000));
 
     let dia = String(horarioBr.getDate()).padStart(2, '0');
@@ -144,8 +161,6 @@
   }
 
   mostrarDataBrasilia();
-  // Se quiser atualizar todo dia sem precisar recarregar, roda assim:
-  // setInterval(mostrarDataBrasilia, 60 * 60 * 1000); // a cada hora
 </script>
 
 </body>
