@@ -6,7 +6,7 @@
 <title>Contador de Brindes</title>
 <style>
   body {
-    background: #2c3e50; /* azul escuro acinzentado */
+    background: #2c3e50;
     color: #ecf0f1;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
@@ -73,7 +73,11 @@
     font-size: 1.4em;
     font-weight: bold;
   }
-  /* Responsivo */
+  #dataFormatada {
+    margin-bottom: 15px;
+    font-size: 1.1em;
+    font-weight: 600;
+  }
   @media (max-width: 400px) {
     body {
       padding: 10px;
@@ -97,7 +101,9 @@
 
 <h1>Prêmios no Dia</h1>
 
-<input type="text" id="campoData" class="campo-data" placeholder="dd/[mês]/aaaa" maxlength="12" />
+<input type="date" id="campoData" class="campo-data" />
+
+<div id="dataFormatada"></div>
 
 <div id="contadorArea">
   <div class="contador">
@@ -120,6 +126,22 @@
 </div>
 
 <script>
+  const meses = ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"];
+
+  document.getElementById('campoData').addEventListener('change', (e) => {
+    const val = e.target.value; // formato yyyy-mm-dd
+    if (!val) {
+      document.getElementById('dataFormatada').textContent = '';
+      return;
+    }
+    const parts = val.split('-');
+    const ano = parts[0];
+    const mes = parseInt(parts[1], 10) - 1;
+    const dia = parts[2];
+    const dataStr = `${dia}/[${meses[mes]}]/${ano}`;
+    document.getElementById('dataFormatada').textContent = dataStr;
+  });
+
   function alterar(tipo, delta) {
     const el = document.getElementById(tipo);
     let val = parseInt(el.textContent);
@@ -127,11 +149,7 @@
     if (val < 0) val = 0;
     el.textContent = val;
   }
-
-  // Opcional: Pode adicionar validação simples na data, mas deixei só o placeholder mesmo.
 </script>
 
 </body>
 </html>
-
-
